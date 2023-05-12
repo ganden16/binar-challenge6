@@ -10,7 +10,6 @@ export default function Home() {
 				<script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
 				<link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css" />
 			</Helmet>
-			<div id="focus-sidenav" />
 			<div className="container-fluid p-0">
 				<Header />
 				<section id="our-services" className="pt-5 mt-5">

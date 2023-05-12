@@ -9,15 +9,9 @@ import Header from "../components/Header"
 import Footer from "../components/Footer"
 
 export default function Car() {
+	const [focusForm, setFocusForm] = useState(false)
 	const {cars, isFetch, isLoading, errors} = useSelector((state) => state.cars)
 	const dispatch = useDispatch()
-
-	const handleFocus = () => {
-		document.getElementById('focus-form').style.display = 'block'
-	}
-	const handleBlur = () => {
-		document.getElementById('focus-form').style.display = 'none'
-	}
 
 	const initialForm = {
 		tipeDriver: null,
@@ -54,9 +48,9 @@ export default function Car() {
 			<Helmet>
 				<title>Binar Rent Car | List Cars</title>
 			</Helmet>
-
-			<div id="focus-sidenav" />
-			<div id="focus-form" />
+			{
+				focusForm && <div id="focus-form" />
+			}
 			<div className="container-fluid p-0">
 				<Header />
 				<section id="form-cars" className="position-relative d-flex justify-content-center">
@@ -64,7 +58,7 @@ export default function Car() {
 						<form id="form" onSubmit={handleSearchCars} className="row d-flex justify-content-sm-end" required>
 							<div className="col-sm ms-sm-2 pe-sm-0">
 								<label className="form-label">Tipe Driver</label>
-								<select onChange={handleChange} onFocus={handleFocus} onBlur={handleBlur} id="tipeDriver" className="shadow-none form-select form-select-sm text-secondary text-opacity-75 input" name="tipeDriver" aria-label=".form-select-sm example" required>
+								<select onChange={handleChange} onFocus={() => setFocusForm(true)} onBlur={() => setFocusForm(false)} id="tipeDriver" className="shadow-none form-select form-select-sm text-secondary text-opacity-75 input" name="tipeDriver" aria-label=".form-select-sm example" required>
 									<option className="text-dark" value="">Pilih Tipe Driver</option>
 									<option className="text-dark" value="true">Dengan Sopir</option>
 									<option className="text-dark" value="false">Tanpa Sopir (Lepas Kunci)</option>
@@ -72,11 +66,11 @@ export default function Car() {
 							</div>
 							<div className="col-sm pe-sm-0">
 								<label htmlFor="tanggal" className="form-label">Tanggal</label>
-								<DatePicker value={formData.tanggal} onBlur={handleBlur} onFocus={handleFocus} onChange={handleChangeTanggal} type="tanggal" name="tanggal" id="tanggal" className="shadow-none form-control text-secondary text-opacity-75 fi-calendar input" placeholderText="Pilih Tanggal" style={{fontSize: '12px'}} required />
+								<DatePicker value={formData.tanggal} onBlur={() => setFocusForm(false)} onFocus={() => setFocusForm(true)} onChange={handleChangeTanggal} type="tanggal" name="tanggal" id="tanggal" className="shadow-none form-control text-secondary text-opacity-75 fi-calendar input" placeholderText="Pilih Tanggal" style={{fontSize: '12px'}} required />
 							</div>
 							<div className="col-sm mb-2 pe-sm-0">
 								<label className="form-label">Waktu Jemput</label>
-								<select onChange={handleChange} onFocus={handleFocus} onBlur={handleBlur} className="shadow-none form-select form-select-sm text-secondary text-opacity-75 fi-clock input" name="waktuJemput" id="waktuJemput" required>
+								<select onChange={handleChange} onFocus={() => setFocusForm(true)} onBlur={() => setFocusForm(false)} className="shadow-none form-select form-select-sm text-secondary text-opacity-75 fi-clock input" name="waktuJemput" id="waktuJemput" required>
 									<option className value="">Pilih Waktu</option>
 									<option className="text-dark" value="08:00">08.00 WIB</option>
 									<option className="text-dark" value="09:00">09.00 WIB</option>
@@ -87,7 +81,7 @@ export default function Car() {
 							</div>
 							<div className="col-sm mb-2">
 								<label className="form-label" htmlFor="jumlahPenumpang">Jumlah Penumpang (optional)</label>
-								<input type="text" onChange={handleChange} onFocus={handleFocus} onBlur={handleBlur} name="jumlahPenumpang" id="jumlahPenumpang" className="shadow-none form-control text-secondary text-opacity-75 rounded-1 input fi-users" placeholder="Jumlah Penumpang" style={{fontSize: '12px'}} />
+								<input type="text" onChange={handleChange} onFocus={() => setFocusForm(true)} onBlur={() => setFocusForm(false)} name="jumlahPenumpang" id="jumlahPenumpang" className="shadow-none form-control text-secondary text-opacity-75 rounded-1 input fi-users" placeholder="Jumlah Penumpang" style={{fontSize: '12px'}} />
 							</div>
 							<div className="col-sm align-self-center d-sm-block d-flex justify-content-center mt-3">
 								<button type="submit" className="btn btn-success">Cari Mobil</button>

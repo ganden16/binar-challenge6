@@ -1,16 +1,13 @@
+import {useState} from "react";
 import {Link} from "react-router-dom";
 
 export default function Header() {
-	const openNav = () => {
-		document.getElementById("mySidenav").style.display = "block";
-		document.getElementById("focus-sidenav").style.display = "block";
-	}
-	const closeNav = () => {
-		document.getElementById("mySidenav").style.display = "none";
-		document.getElementById("focus-sidenav").style.display = "none";
-	}
+	const [nav, setNav] = useState(false)
 	return (
 		<>
+			{
+				nav && <div id="focus-sidenav" />
+			}
 			<header id="header" className="abu-abu pt-3">
 				<div className="row mb-5 ps-sm-5 px-3">
 					<div className="col">
@@ -29,17 +26,20 @@ export default function Header() {
 								<a href="#footer" className="btn btn-primary mt-1" />
 							</div>
 							<div>
-								<div id="mySidenav" className="sidenav">
-									<a href="#" className="closebtn" onClick={closeNav}>×</a>
-									<a href="#" className="fw-bold fs-3">BCR</a>
-									<a href="/#our-services">Our Service</a>
-									<a href="/#why-us">Why Us</a>
-									<a href="/#testimonial">Testimonial</a>
-									<a href="/#faq">FAQ</a>
-									<a href="/#register" className="d-inline-block btn btn-success p-2 ms-4 mt-3 text-white ">Register</a>
-								</div>
+								{
+									nav &&
+									<div id="mySidenav" className="sidenav">
+										<a href="#" className="closebtn" onClick={() => setNav(false)}>×</a>
+										<a href="#" className="fw-bold fs-3">BCR</a>
+										<a href="/#our-services">Our Service</a>
+										<a href="/#why-us">Why Us</a>
+										<a href="/#testimonial">Testimonial</a>
+										<a href="/#faq">FAQ</a>
+										<a href="/#register" className="d-inline-block btn btn-success p-2 ms-4 mt-3 text-white ">Register</a>
+									</div>
+								}
 								<div className="d-inline pt-5">
-									<div className="container-fluid d-inline px-1 " style={{fontSize: '30px', cursor: 'pointer'}} onClick={openNav}>☰</div>
+									<div className="container-fluid d-inline px-1 " style={{fontSize: '30px', cursor: 'pointer'}} onClick={() => setNav(true)}>☰</div>
 								</div>
 							</div>
 						</nav>
