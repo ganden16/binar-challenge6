@@ -1,4 +1,4 @@
-import {useState} from "react"
+import {useEffect, useState} from "react"
 import {Helmet} from "react-helmet"
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
@@ -9,15 +9,16 @@ import Header from "../components/Header"
 import Footer from "../components/Footer"
 
 export default function Car() {
+	const [isFetch, setIsFetch] = useState(false)
 	const [focusForm, setFocusForm] = useState(false)
-	const {cars, isFetch, isLoading, errors} = useSelector((state) => state.cars)
+	const {cars, isLoading, errors} = useSelector((state) => state.cars)
 	const dispatch = useDispatch()
 
 	const initialForm = {
-		tipeDriver: null,
-		tanggal: null,
-		waktuJemput: null,
-		jumlahPenumpang: null
+		tipeDriver: "",
+		tanggal: "",
+		waktuJemput: "",
+		jumlahPenumpang: ""
 	}
 	const [formData, setFormData] = useState(initialForm)
 
@@ -26,23 +27,20 @@ export default function Car() {
 			...prevState,
 			[e.target.name]: e.target.value
 		}));
+		setIsFetch(true)
 	}
-	const handleChangeTanggal = (date) => {
-		const newDate = new Date(date)
-		const formattedDate = `${newDate.getMonth() + 1}/${newDate.getDate()}/${newDate.getFullYear()}`
-		setFormData(prevState => ({
-			...prevState,
-			tanggal: formattedDate
-		}));
-	}
-	const handleSearchCars = (e) => {
-		e.preventDefault()
+
+	useEffect(() => {
+		handleSearchCars()
+	}, [formData])
+
+	const handleSearchCars = () => {
 		dispatch(getCars()).then(() => {
-			dispatch(filterTipeDriver(formData.tipeDriver))
+			if(formData.tipeDriver) dispatch(filterTipeDriver(formData.tipeDriver))
 			if(formData.jumlahPenumpang) dispatch(filterJumlahPenumpang(formData.jumlahPenumpang))
 		})
 	}
-
+	console.log(cars)
 	return (
 		<>
 			<Helmet>
@@ -54,23 +52,23 @@ export default function Car() {
 			<div className="container-fluid p-0">
 				<Header />
 				<section id="form-cars" className="position-relative d-flex justify-content-center">
-					<div className="w-75 py-4 px-3 bg-white rounded-3 shadow-lg">
-						<form id="form" onSubmit={handleSearchCars} className="row d-flex justify-content-sm-end" required>
-							<div className="col-sm ms-sm-2 pe-sm-0">
+					<div className="py-4 px-3 bg-white rounded-3 shadow-lg" style={{width: '70%'}}>
+						<div id="form" className="row d-flex justify-content-evenly px-3">
+							<div className="col-sm-3">
 								<label className="form-label">Tipe Driver</label>
-								<select onChange={handleChange} onFocus={() => setFocusForm(true)} onBlur={() => setFocusForm(false)} id="tipeDriver" className="shadow-none form-select form-select-sm text-secondary text-opacity-75 input" name="tipeDriver" aria-label=".form-select-sm example" required>
+								<select onChange={handleChange} onSeeked={() => setFocusForm(true)} onBlur={() => setFocusForm(false)} id="tipeDriver" className="shadow-none form-select form-select-sm text-secondary text-opacity-75 input" name="tipeDriver" aria-label=".form-select-sm example">
 									<option className="text-dark" value="">Pilih Tipe Driver</option>
 									<option className="text-dark" value="true">Dengan Sopir</option>
 									<option className="text-dark" value="false">Tanpa Sopir (Lepas Kunci)</option>
 								</select>
 							</div>
-							<div className="col-sm pe-sm-0">
+							<div className="col-sm-3">
 								<label htmlFor="tanggal" className="form-label">Tanggal</label>
-								<DatePicker value={formData.tanggal} onBlur={() => setFocusForm(false)} onFocus={() => setFocusForm(true)} onChange={handleChangeTanggal} type="tanggal" name="tanggal" id="tanggal" className="shadow-none form-control text-secondary text-opacity-75 fi-calendar input" placeholderText="Pilih Tanggal" style={{fontSize: '12px'}} required />
+								<DatePicker value={formData.tanggal} onBlur={() => setFocusForm(false)} onFocus={() => setFocusForm(true)} type="tanggal" name="tanggal" id="tanggal" className="shadow-none form-control text-secondary text-opacity-75 fi-calendar input" placeholderText="Pilih Tanggal" style={{fontSize: '12px'}} />
 							</div>
-							<div className="col-sm mb-2 pe-sm-0">
+							<div className="col-sm-3 mb-2">
 								<label className="form-label">Waktu Jemput</label>
-								<select onChange={handleChange} onFocus={() => setFocusForm(true)} onBlur={() => setFocusForm(false)} className="shadow-none form-select form-select-sm text-secondary text-opacity-75 fi-clock input" name="waktuJemput" id="waktuJemput" required>
+								<select onFocus={() => setFocusForm(true)} onBlur={() => setFocusForm(false)} className="shadow-none form-select form-select-sm text-secondary text-opacity-75 fi-clock input" name="waktuJemput" id="waktuJemput" >
 									<option className value="">Pilih Waktu</option>
 									<option className="text-dark" value="08:00">08.00 WIB</option>
 									<option className="text-dark" value="09:00">09.00 WIB</option>
@@ -79,14 +77,11 @@ export default function Car() {
 									<option className="text-dark" value="12:00">12.00 WIB</option>
 								</select>
 							</div>
-							<div className="col-sm mb-2">
+							<div className="col-sm-3 mb-2">
 								<label className="form-label" htmlFor="jumlahPenumpang">Jumlah Penumpang (optional)</label>
-								<input type="text" onChange={handleChange} onFocus={() => setFocusForm(true)} onBlur={() => setFocusForm(false)} name="jumlahPenumpang" id="jumlahPenumpang" className="shadow-none form-control text-secondary text-opacity-75 rounded-1 input fi-users" placeholder="Jumlah Penumpang" style={{fontSize: '12px'}} />
+								<input type="text" onChange={handleChange} onAbortCapture={() => setFocusForm(true)} onBlur={() => setFocusForm(false)} name="jumlahPenumpang" id="jumlahPenumpang" className="shadow-none form-control text-secondary text-opacity-75 rounded-1 input fi-users" placeholder="Jumlah Penumpang" style={{fontSize: '12px'}} />
 							</div>
-							<div className="col-sm align-self-center d-sm-block d-flex justify-content-center mt-3">
-								<button type="submit" className="btn btn-success">Cari Mobil</button>
-							</div>
-						</form>
+						</div>
 					</div>
 				</section>
 				<section className="position-relative w-75 mx-auto">
