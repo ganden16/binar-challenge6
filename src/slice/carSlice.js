@@ -1,5 +1,5 @@
-import {createSlice, createAsyncThunk} from "@reduxjs/toolkit";
-import axios from "axios";
+import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
+import axios from 'axios'
 
 export const getCars = createAsyncThunk('cars/getcars', async () => {
 	const res = await axios.get('https://raw.githubusercontent.com/fnurhidayat/probable-garbanzo/main/data/cars.min.json')

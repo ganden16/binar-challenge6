@@ -1,12 +1,13 @@
-import {useEffect, useState} from "react"
-import {Helmet} from "react-helmet"
+import React from 'react'
+import {useEffect, useState} from 'react'
+import {Helmet} from 'react-helmet'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-import {useDispatch, useSelector} from "react-redux"
-import {getCars} from "../slice/carSlice"
-import {filterJumlahPenumpang, filterTipeDriver} from "../slice/carSlice"
-import Header from "../components/Header"
-import Footer from "../components/Footer"
+import {useDispatch, useSelector} from 'react-redux'
+import {getCars} from '../slice/carSlice'
+import {filterJumlahPenumpang, filterTipeDriver} from '../slice/carSlice'
+import Header from '../components/Header'
+import Footer from '../components/Footer'
 
 export default function Car() {
 	const [isFetch, setIsFetch] = useState(false)
@@ -15,10 +16,10 @@ export default function Car() {
 	const dispatch = useDispatch()
 
 	const initialForm = {
-		tipeDriver: "",
-		tanggal: "",
-		waktuJemput: "",
-		jumlahPenumpang: ""
+		tipeDriver: '',
+		tanggal: '',
+		waktuJemput: '',
+		jumlahPenumpang: ''
 	}
 	const [formData, setFormData] = useState(initialForm)
 
@@ -26,12 +27,14 @@ export default function Car() {
 		setFormData(prevState => ({
 			...prevState,
 			[e.target.name]: e.target.value
-		}));
+		}))
 		setIsFetch(true)
 	}
 
+	const isFormEmpty = Object.values(formData).every(value => value == '')
 	useEffect(() => {
 		handleSearchCars()
+		if(isFormEmpty) setIsFetch(false)
 	}, [formData])
 
 	const handleSearchCars = () => {
@@ -40,7 +43,7 @@ export default function Car() {
 			if(formData.jumlahPenumpang) dispatch(filterJumlahPenumpang(formData.jumlahPenumpang))
 		})
 	}
-	console.log(cars)
+
 	return (
 		<>
 			<Helmet>
@@ -56,7 +59,7 @@ export default function Car() {
 						<div id="form" className="row d-flex justify-content-evenly px-3">
 							<div className="col-sm-3">
 								<label className="form-label">Tipe Driver</label>
-								<select onChange={handleChange} onSeeked={() => setFocusForm(true)} onBlur={() => setFocusForm(false)} id="tipeDriver" className="shadow-none form-select form-select-sm text-secondary text-opacity-75 input" name="tipeDriver" aria-label=".form-select-sm example">
+								<select onChange={handleChange} id="tipeDriver" className="shadow-none form-select form-select-sm text-secondary text-opacity-75 input" name="tipeDriver" aria-label=".form-select-sm example">
 									<option className="text-dark" value="">Pilih Tipe Driver</option>
 									<option className="text-dark" value="true">Dengan Sopir</option>
 									<option className="text-dark" value="false">Tanpa Sopir (Lepas Kunci)</option>
@@ -64,11 +67,11 @@ export default function Car() {
 							</div>
 							<div className="col-sm-3">
 								<label htmlFor="tanggal" className="form-label">Tanggal</label>
-								<DatePicker value={formData.tanggal} onBlur={() => setFocusForm(false)} onFocus={() => setFocusForm(true)} type="tanggal" name="tanggal" id="tanggal" className="shadow-none form-control text-secondary text-opacity-75 fi-calendar input" placeholderText="Pilih Tanggal" style={{fontSize: '12px'}} />
+								<DatePicker value={formData.tanggal} onCalendarClose={() => setFocusForm(false)} onFocus={() => setFocusForm(true)} type="tanggal" name="tanggal" id="tanggal" className="shadow-none form-control text-secondary text-opacity-75 fi-calendar input" placeholderText="Pilih Tanggal" style={{fontSize: '12px'}} />
 							</div>
 							<div className="col-sm-3 mb-2">
 								<label className="form-label">Waktu Jemput</label>
-								<select onFocus={() => setFocusForm(true)} onBlur={() => setFocusForm(false)} className="shadow-none form-select form-select-sm text-secondary text-opacity-75 fi-clock input" name="waktuJemput" id="waktuJemput" >
+								<select onChange={handleChange} className="shadow-none form-select form-select-sm text-secondary text-opacity-75 fi-clock input" name="waktuJemput" id="waktuJemput" >
 									<option className value="">Pilih Waktu</option>
 									<option className="text-dark" value="08:00">08.00 WIB</option>
 									<option className="text-dark" value="09:00">09.00 WIB</option>
@@ -79,7 +82,7 @@ export default function Car() {
 							</div>
 							<div className="col-sm-3 mb-2">
 								<label className="form-label" htmlFor="jumlahPenumpang">Jumlah Penumpang (optional)</label>
-								<input type="text" onChange={handleChange} onAbortCapture={() => setFocusForm(true)} onBlur={() => setFocusForm(false)} name="jumlahPenumpang" id="jumlahPenumpang" className="shadow-none form-control text-secondary text-opacity-75 rounded-1 input fi-users" placeholder="Jumlah Penumpang" style={{fontSize: '12px'}} />
+								<input type="text" onChange={handleChange} name="jumlahPenumpang" id="jumlahPenumpang" className="shadow-none form-control text-secondary text-opacity-75 rounded-1 input fi-users" placeholder="Jumlah Penumpang" style={{fontSize: '12px'}} />
 							</div>
 						</div>
 					</div>
@@ -94,14 +97,14 @@ export default function Car() {
 						}
 						{
 							isFetch && cars.length > 0 &&
-							cars.map(car => (
-								<div className="col-sm-4 mb-4">
+							cars.map((car, index) => (
+								<div key={index} className="col-sm-4 mb-4">
 									<div className="card px-3 scale border-1 border-opacity-10 shadow-lg " style={{height: '650px'}}>
 										<div className="px-2 pt-4">
 											<img className="img-fluid rounded-1" style={{width: '100%', height: '200px'}} src={car.image} alt="car" />
 										</div>
 										<div className="ms-auto me-3 mt-1">
-											<p className={"fw-bolder bg-opacity-25 " + (car.available ? 'text-success' : 'text-danger')}>{car.available ? 'Dengan Sopir' : 'Tanpa Sopir'}</p>
+											<p className={'fw-bolder bg-opacity-25 ' + (car.available ? 'text-success' : 'text-danger')}>{car.available ? 'Dengan Sopir' : 'Tanpa Sopir'}</p>
 										</div>
 										<div className="card-body">
 											<div className="row">
