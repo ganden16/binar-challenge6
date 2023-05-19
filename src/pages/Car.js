@@ -72,7 +72,7 @@ export default function Car() {
 							<div className="col-sm-3 mb-2">
 								<label className="form-label">Waktu Jemput</label>
 								<select onChange={handleChange} className="shadow-none form-select form-select-sm text-secondary text-opacity-75 fi-clock input" name="waktuJemput" id="waktuJemput" >
-									<option className value="">Pilih Waktu</option>
+									<option value="">Pilih Waktu</option>
 									<option className="text-dark" value="08:00">08.00 WIB</option>
 									<option className="text-dark" value="09:00">09.00 WIB</option>
 									<option className="text-dark" value="10:00">10.00 WIB</option>
