@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/binar-challenge6/static/css/main.639596ad.css",
+    "main.js": "/binar-challenge6/static/js/main.62138579.js",
+    "static/media/fi_users.svg": "/binar-challenge6/static/media/fi_users.c02cdaa196afec46f16a.svg",
+    "index.html": "/binar-challenge6/index.html",
+    "static/media/fi_calendar.svg": "/binar-challenge6/static/media/fi_calendar.760ed131d142e5aebf90.svg",
+    "static/media/fi_clock.svg": "/binar-challenge6/static/media/fi_clock.ab25c7ed309c9ee2ea01.svg",
+    "main.639596ad.css.map": "/binar-challenge6/static/css/main.639596ad.css.map",
+    "main.62138579.js.map": "/binar-challenge6/static/js/main.62138579.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.639596ad.css",
+    "static/js/main.62138579.js"
+  ]
+}
